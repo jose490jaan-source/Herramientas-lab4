@@ -52,7 +52,17 @@ public class HerramientasController {
         return "redirect:/tabla";
     }
 	
-	
+    @GetMapping("/editar/{id}")
+    public String editarHerramienta(@PathVariable Integer id, Model model) {
+        // Buscamos la herramienta por su ID. Si existe, la mandamos al formulario.
+        java.util.Optional<Herramienta> herramienta = herramientaRepo.findById(id);
+        if (herramienta.isPresent()) {
+            model.addAttribute("herramienta", herramienta.get());
+            model.addAttribute("categorias", categoriaRepo.findAll());
+            return "formulario"; // Reutilizamos el mismo formulario HTML
+        }
+        return "redirect:/tabla";
+    }	
 	
 
 }

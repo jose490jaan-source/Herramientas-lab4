@@ -7,10 +7,10 @@ public class Herramienta {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    
     private String nombre;
     private String marca;
     private double precio;
+    private String imagen;
 
     @ManyToOne
     @JoinColumn(name = "categoria_id")
@@ -54,6 +54,14 @@ public class Herramienta {
 
 	public void setCategoria(Categoria categoria) {
 		this.categoria = categoria;
+	}
+
+	public String getImagen() {
+		return imagen;
+	}
+
+	public void setImagen(String imagen) {
+		this.imagen = imagen;
 	}
 
 
