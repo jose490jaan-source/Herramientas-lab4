@@ -29,12 +29,11 @@
         <div class="row row-cols-1 row-cols-md-3 g-4">
             <div class="col" th:each="h : ${herramientas}">
                 <div class="card h-100 shadow-sm">
-				<div style="height: 200px; overflow: hidden;" class="w-100">
+				<div style="height: 200px; background-color: #ffffff; overflow: hidden;" class="w-100 d-flex align-items-center justify-content-center border-bottom">
                         <img th:src="${h.imagen != null && h.imagen != '' ? h.imagen : 'https://via.placeholder.com/300x200?text=Sin+Imagen'}" 
-                             class="card-img-top w-100 h-100" 
                              alt="Imagen de herramienta" 
-                             style="object-fit: cover;">
-                    </div>>
+                             style="width: 100%; height: 100%; object-fit: contain; padding: 15px;">
+                    </div>
                     
                     <div class="card-body">
                         <h5 class="card-title text-primary" th:text="${h.nombre}">Nombre</h5>

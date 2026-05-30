@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import com.herramientas.models.Categoria;
 import com.herramientas.models.Herramienta;
 import com.herramientas.repository.ICategoriaRepository;
 import com.herramientas.repository.IHerramientaRepository;
@@ -64,5 +65,19 @@ public class HerramientasController {
         return "redirect:/tabla";
     }	
 	
+ // Muestra el formulario para crear una nueva categoría
+    @GetMapping("/categoria/nueva")
+    public String nuevaCategoria(Model model) {
+        model.addAttribute("categoria", new Categoria());
+        return "nueva-categoria";
+    }
+
+    // Guarda la categoría en la base de datos y redirige
+    @PostMapping("/categoria/guardar")
+    public String guardarCategoria(@ModelAttribute Categoria categoria) {
+        categoriaRepo.save(categoria);
+        // Redirecciona al formulario de herramientas para que la nueva categoría aparezca lista en el desplegable
+        return "redirect:/nueva"; 
+    }
 
 }
