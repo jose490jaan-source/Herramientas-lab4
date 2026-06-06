@@ -6,62 +6,57 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import com.herramientas.models.Herramienta;
-import com.herramientas.repository.ICategoriaRepository;
-import com.herramientas.repository.IHerramientaRepository;
+import com.herramientas.services.ICategoriaService;
+import com.herramientas.services.IHerramientaService;
 
 @Controller
 public class HomeController {
-	
-	@Autowired
-    private IHerramientaRepository herramientaRepo;
     
     @Autowired
-    private ICategoriaRepository categoriaRepo;
+    private IHerramientaService herramientaService;
+    
+    @Autowired
+    private ICategoriaService categoriaService;
 
-    // Vista Home: Muestra todas las herramientas
     @GetMapping("/")
     public String home(Model model) {
-        model.addAttribute("herramientas", herramientaRepo.findAll());
+        model.addAttribute("herramientas", herramientaService.listarTodas());
         return "home";
     }
 
-    // Vista Tabla: Muestra todas las herramientas en formato tabla 
     @GetMapping("/tabla")
     public String mostrarTabla(Model model) {
-        model.addAttribute("herramientas", herramientaRepo.findAll());
+        model.addAttribute("herramientas", herramientaService.listarTodas());
         return "tabla";
     }
 
-    // Rutas para el CRUD 
     @GetMapping("/nueva")
     public String nuevaHerramienta(Model model) {
         model.addAttribute("herramienta", new Herramienta());
-        model.addAttribute("categorias", categoriaRepo.findAll());
+        model.addAttribute("categorias", categoriaService.listarTodas());
         return "formulario";
     }
 
     @PostMapping("/guardar")
     public String guardarHerramienta(@ModelAttribute Herramienta herramienta) {
-        herramientaRepo.save(herramienta);
+        herramientaService.guardar(herramienta);
         return "redirect:/tabla";
     }
     
     @GetMapping("/eliminar/{id}")
     public String eliminarHerramienta(@PathVariable Integer id) {
-        herramientaRepo.deleteById(id);
+        herramientaService.eliminar(id);
         return "redirect:/tabla";
     }
-	
+    
     @GetMapping("/editar/{id}")
     public String editarHerramienta(@PathVariable Integer id, Model model) {
-        // Buscamos la herramienta por su ID. Si existe, la mandamos al formulario.
-        java.util.Optional<Herramienta> herramienta = herramientaRepo.findById(id);
-        if (herramienta.isPresent()) {
-            model.addAttribute("herramienta", herramienta.get());
-            model.addAttribute("categorias", categoriaRepo.findAll());
-            return "formulario"; // Reutilizamos el mismo formulario HTML
+        Herramienta herramienta = herramientaService.buscarPorId(id);
+        if (herramienta != null) {
+            model.addAttribute("herramienta", herramienta);
+            model.addAttribute("categorias", categoriaService.listarTodas());
+            return "formulario"; 
         }
         return "redirect:/tabla";
-    }	
-	
+    }    
 }
